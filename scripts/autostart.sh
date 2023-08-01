@@ -8,7 +8,7 @@ redshift -x && redshift -o
 while killall -s SIGKILL picom; do
   sleep 0.2
 done
-picom -b &
+#picom -b &
 ~/.fehbg &
 VBoxClient --seamless &
 VBoxClient --draganddrop &

@@ -60,7 +60,7 @@ keys = [
     Key([mod, 'control'], "w", lazy.window.kill()),
 
     Key([mod, "control"], "r", lazy.restart()),
-    Key([mod, "control"], "q", lazy.shutdown()),
+    Key([mod, "mod1", "control"], "q", lazy.shutdown()),
     Key([mod], "r", lazy.spawncmd()),
     Key([mod, 'shift'], "r", lazy.spawn(commands.rofi)),
     Key([mod], "p", lazy.spawn('xrandr --output eDP-1 --off'), lazy.restart()),

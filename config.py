@@ -5,7 +5,6 @@
 # Copyright (c) 2012 Craig Barnes
 # Copyright (c) 2013 horsik
 # Copyright (c) 2013 Tao Sauvage
-# Copyright (c) 2022 Henrique Hemerly Maia
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +34,8 @@ from libqtile import layout, bar, widget, hook, qtile
 from typing import List  # noqa: F401
 import commands
 from keybindings import mod, keys, default_term
-from colorschemes import gruvbox_colors as colors
+#from colorschemes import gruvbox_colors as colors
+from colorschemes import catppuccin_colors as colors
 
 
 # >>> groups section >>>
@@ -91,7 +91,7 @@ keys.extend([
 # <<< groups section <<<
 
 # >>> layouts section >>>
-layout_params = dict(
+layouts_params = dict(
     margin=10,
     border_focus=colors['border'],
     border_normal=colors['border_inactive'],
@@ -99,13 +99,13 @@ layout_params = dict(
 )
 
 layouts = [
-    layout.MonadTall(**layout_params),
-    layout.MonadThreeCol(**layout_params),
-    layout.MonadWide(**layout_params),
-    layout.Max(),
-    layout.Bsp(**layout_params,
+    layout.MonadTall(**layouts_params),
+    layout.Bsp(**layouts_params,
                grow_amount=5,
                fair=False,),
+    layout.MonadWide(**layouts_params),
+    layout.MonadThreeCol(**layouts_params),
+    layout.Max(),
 ]
 # <<< layouts section <<<
 
@@ -118,7 +118,8 @@ widget_defaults = dict(
     fontsize=20,
     padding=1,
     foreground=colors['highlight'],
-    background=colors['background'],
+    #background=colors['background'],
+    background='2A2A3A',
     border_color=colors['border'],
 )
 
@@ -128,14 +129,69 @@ graph_monitor_options = dict(
     graph_color=colors['highlight'],
     fill_color=colors['highlight'],
 #    samples=200,
-    samples=400,
+    samples=200,
     line_width=1,
     frequency=0.05,
 #    frequency=0.2,
 #    margin_x=-149,
 #    margin_y=4,
-    border_width=0.25,
-    width=75,
+    border_width=0.1,
+    width=100,
+    type='linefill'
+)
+
+cpu_graph_monitor_options = dict(
+    graph_color='89B4FA',
+    fill_color='89B4FA',
+    samples=200,
+    line_width=1,
+    frequency=0.05,
+    border_width=0.1,
+    width=100,
+    type='linefill'
+)
+
+memory_graph_monitor_options = dict(
+    graph_color='F5C2E7',
+    fill_color='F5C2E7',
+    samples=200,
+    line_width=1,
+    frequency=0.05,
+    border_width=0.1,
+    width=100,
+    type='linefill'
+)
+
+network_graph_monitor_options = dict(
+    graph_color='F38BA8',
+    fill_color='F38BA8',
+    samples=200,
+    line_width=1,
+    frequency=0.05,
+    border_width=0.1,
+    width=100,
+    type='linefill'
+)
+
+disk_graph_monitor_options = dict(
+    graph_color='A6E3A1',
+    fill_color='A6E3A1',
+    samples=200,
+    line_width=1,
+    frequency=0.05,
+    border_width=0.1,
+    width=100,
+    type='linefill'
+)
+
+swap_monitor_options = dict(
+    graph_color='BAC2DE',
+    fill_color='BAC2DE',
+    samples=200,
+    line_width=1,
+    frequency=0.05,
+    border_width=0.1,
+    width=100,
     type='linefill'
 )
 
@@ -170,18 +226,22 @@ widgets_main = [
     widget.CurrentLayout(foreground=colors['highlight'], fontsize=14),
     widget.GroupBox(**groupbox_options),
     #widget.Sep(**separator_options),
-    widget.Prompt(prompt='☉ ', fontsize=12, foreground='CC241D'),
-    widget.Sep(**separator_options),
+    #widget.Prompt(prompt='☉ ', fontsize=12, foreground='CC241D'),
+    widget.Prompt(prompt='☉ ', fontsize=12, foreground='F38BA8'),
+    #widget.Sep(**separator_options),
     widget.WindowName(foreground=colors['highlight'], fontsize=14),
     widget.Spacer(length=1),
     #widget.Sep(**separator_options),
-    widget.CPUGraph(**graph_monitor_options),
+    widget.CPUGraph(**cpu_graph_monitor_options),
     #widget.Spacer(length=1),
-    widget.MemoryGraph(**graph_monitor_options),
+    widget.MemoryGraph(**memory_graph_monitor_options),
+    widget.SwapGraph(**swap_monitor_options),
     #widget.Spacer(length=1),
-    widget.HDDBusyGraph(device='sda', **graph_monitor_options),
+    widget.HDDBusyGraph(device='sda', **disk_graph_monitor_options),
     #widget.Spacer(length=1),
-    widget.NetGraph(**graph_monitor_options),
+    widget.NetGraph(bandwidth_type='down', **network_graph_monitor_options),
+    #widget.CheckUpdates(distro='Gentoo_eix', **widget_defaults),
+    #widget.Net(**widget_defaults),
     #widget.Spacer(bar.STRETCH),
     #widget.Cmus(foreground=colors['text_normal'],
     #            play_color=colors['highlight'],
@@ -218,17 +278,17 @@ bar_defaults = dict(size=22,
                     margin=[0, 0, 0, 0],
                     background=colors['background'])
 
-bar_screen1 = bar.Bar(widgets=widgets_main,
-                      **bar_defaults)
+bar_screen1 = bar.Bar(widgets=widgets_main, size=22, opacity=1)
+                      #**bar_defaults)
 bar_screen2 = bar.Bar(widgets=widgets_bar2,
                       **bar_defaults)
 
 screens = [
     Screen(top=bar_screen1,
-           wallpaper='~/wallpapers/gruvbox.png',
+           wallpaper='~/wallpapers/catppuccin.png',
            wallpaper_mode='fill',),
     Screen(top=bar_screen2,
-           wallpaper='~/wallpapers/gruvbox.png',
+           wallpaper='~/wallpapers/catppuccin.png',
            wallpaper_mode='fill',),
 ]
 
@@ -268,7 +328,7 @@ floating_layout = layout.Floating(
         Match(title='branchdialog'),
         Match(title='Steam'),
     ],
-    **layout_params
+    **layouts_params
 )
 
 #floating_layout = layout.Floating(
@@ -292,7 +352,7 @@ floating_layout = layout.Floating(
 #        {'wmclass': 'dayEditor'}, # xcalendar day editor
 #        #{'wmname': 'Steam'}, # steam friends list
 #    ],
-#    **layout_params
+#    **layouts_params
 #)
 
 auto_fullscreen = False
@@ -312,4 +372,5 @@ def autostart():
 #
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
-wmname = "qtile"
+#wmname = "qtile"
+wmname = 'LG3D'

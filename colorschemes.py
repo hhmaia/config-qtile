@@ -52,3 +52,16 @@ gruvbox_colors = {
     'group_inactive':   '665C54',
     'group_active':     'FABD2F',
 }
+
+catppuccin_colors = {
+    'background':       '1E1E2E',
+    'highlight':        'CDD6F4',
+    #'highlight':        'F9E2AF',
+    #'text_normal':      'CDD6F4',
+    'text_normal':      'F9E2AF',
+    'border':           '94E2D5',
+    'border_inactive':  '45475A',
+    'separator':        '665C54',
+    'group_inactive':   'F5C2E7',
+    'group_active':     'A6E3A1',
+}
